@@ -1,9 +1,18 @@
 import { cartDAO } from "../dao/cart.js"; 
 import { productDAO } from "../dao/product/index.js";
 
-export const renderIndexPage = async(req, res, next) => {
-    const products = await productDAO.getProducts();
-    res.render('index',{title:'index',products,user: req.session.user});
+export const renderIndexPage = async (req, res, next) => {
+    try {
+        const products = await productDAO.getProducts();
+        res.render('index', {
+            title: 'index',
+            products: products,
+            user: req.session.user
+        });
+    } catch (error) {
+        console.error("Error rendering index page:", error);
+        res.status(500).send("Internal Server Error");
+    }
 };
 export const renderProductsPage = async ( req, res, next) =>{
     const { limit, sort, page, query } = req.query; 

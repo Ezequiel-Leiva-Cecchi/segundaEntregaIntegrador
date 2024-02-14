@@ -24,3 +24,16 @@ h1 {
 #logoutBtn:hover {
     background-color: #45a049; 
 }
+
+.product-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; 
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px; 
+}

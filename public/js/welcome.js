@@ -11,14 +11,14 @@ logoutBtn.addEventListener('click', async (e) => {
 
         if (result.ok) {
             // Si la respuesta es exitosa, muestra un mensaje y redirige al usuario al inicio de sesión
-            alert('¡Has cerrado sesión con éxito!');
+            alert('¡You have logged out successfully.!');
             window.location.href = 'http://localhost:8080/login';
         } else {
             // Si hay un problema con la respuesta, muestra un mensaje de error
-            alert('Hubo un problema al cerrar sesión. Por favor, inténtalo de nuevo.');
+            alert('There was a problem slogged out. Please try again.');
         }
     } catch (error) {
-        console.error('Error al cerrar sesión:', error);
-        alert('Hubo un error al cerrar sesión. Por favor, inténtalo de nuevo.');
+        console.error('Logout error:', error);
+        alert('There was a problem slogged out. Please try again.');
     }
 });

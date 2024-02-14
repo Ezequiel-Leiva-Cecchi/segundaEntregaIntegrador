@@ -1,7 +1,13 @@
-
 <h1>Welcome {{user.first_name}} {{user.last_name}}!!!</h1>
-
 <button id="logoutBtn" type="button">Log out</button>
-
+<div class="product-cards">
+    {{#each products}}
+    <div class="card">
+        <h2>{{this.title}}</h2>
+        <p>${{this.price}}</p>
+        <p>{{this.description}}</p>
+    </div>
+    {{/each}}
+</div>
 <script src="js/welcome.js"></script>
 <link rel="stylesheet" type="text/css" href="css/welcome.css">
