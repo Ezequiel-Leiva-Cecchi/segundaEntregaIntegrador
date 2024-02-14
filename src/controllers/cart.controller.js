@@ -1,4 +1,4 @@
-import { cartDAO } from "../dao/cart.js"; // Importa el DAO del carrito
+import { cartDAO } from "../dao/cart.js"; 
 
 // Controlador para obtener todos los carritos
 export const getCart = async (req, res, next) => {

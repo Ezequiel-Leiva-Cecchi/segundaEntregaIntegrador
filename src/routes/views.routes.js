@@ -1,19 +1,14 @@
 import { Router } from "express";
-import { checkExistingUser } from "../middlewares/authMiddleware.js";
+import { renderIndexPage,renderProductsPage, renderProductPage, renderCartPage, renderLoginPage, renderRegisterPage } from "../controllers/views.controller.js";
+import {requireAuth, checkExistingUser } from "../middlewares/authMiddleware.js";
 
 const viewsRoutes = Router();
 
-viewsRoutes.get('/', (req, res) => {
-    const user = req.session.user;
-    res.render('index', { user });
-});
-
-viewsRoutes.get('/login', checkExistingUser, (req, res) => {
-    res.render('login');
-});
-
-viewsRoutes.get('/register', checkExistingUser, (req, res) => {
-    res.render('register');
-});
+viewsRoutes.get('/', requireAuth, renderIndexPage);
+viewsRoutes.get('/products', requireAuth, renderProductsPage);
+viewsRoutes.get('/product/:pid', requireAuth, renderProductPage);
+viewsRoutes.get('/cart/:cid', requireAuth, renderCartPage);
+viewsRoutes.get('/login', checkExistingUser, renderLoginPage);
+viewsRoutes.get('/register', checkExistingUser, renderRegisterPage);
 
 export default viewsRoutes;
