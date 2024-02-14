@@ -79,7 +79,7 @@ export const logout = async (req, res, next) => {
 };
 
 // Función para manejar el caso en el que falla el registro
-export const registerFail = async (req, res, next) => {
+export const failRegister = async (req, res, next) => {
   // Se devuelve un mensaje de error JSON indicando que el registro ha fallado
   res.status(400).send({ error: 'Failed to register' });
 };

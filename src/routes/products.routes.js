@@ -1,12 +1,12 @@
 import e, {Router} from 'express';
 import{getProducts, getProduct, addProduct, editProduct, deleteProduct} from '../controllers/product.controller.js';
 
-const router = Router();
+const productRouter = Router();
 
-router.get('/', getProducts);
-router.get('/:pid',getProduct);
-router.post('/',addProduct);
-router.put('/:pid', editProduct);
-router.delete('/:pid', deleteProduct);
+productRouter.get('/', getProducts);
+productRouter.get('/:pid',getProduct);
+productRouter.post('/',addProduct);
+productRouter.put('/:pid', editProduct);
+productRouter.delete('/:pid', deleteProduct);
 
-export default router;
+export default productRouter;
