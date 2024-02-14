@@ -9,4 +9,7 @@ export class usersMongoose{
     async getUserById(id){
         return await usersModel.findOne({_id: id}).lean({virtuals:true});
     }
+    async getUserByEmail({email}){
+        return await usersModel.findOne({email}).lean({virtuals: true});
+    }
 }
