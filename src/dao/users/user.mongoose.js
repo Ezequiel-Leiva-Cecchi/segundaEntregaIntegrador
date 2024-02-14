@@ -6,4 +6,7 @@ export class usersMongoose{
         await users.save()
         return users.toObject({virtuals:true});
     }
+    async getUserById(id){
+        return await usersModel.findOne({_id: id}).lean({virtuals:true});
+    }
 }
