@@ -11,7 +11,7 @@ export const register = async (req, res, next) => {
       user.email === 'adminCoder@coder.com' &&
       user.password === 'adminCod3r123'
     ) {
-      user.isAdmin = true; // Si lo es, se le otorga el estado de administrador
+      user.isAdmin = true; 
     } else {
       user.isAdmin = false;
     }
@@ -21,10 +21,10 @@ export const register = async (req, res, next) => {
 
     // Redirigir al usuario a la página principal después del registro
     res.redirect('/');
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     // Si hay un error durante el registro, se devuelve un mensaje de error JSON
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -46,7 +46,7 @@ export const login = async (req, res, next) => {
       user.email === 'adminCoder@coder.com' &&
       user.password === 'adminCod3r123'
     ) {
-      user.isAdmin = true; // Si lo es, se le otorga el estado de administrador
+      user.isAdmin = true; 
     } else {
       user.isAdmin = false;
     }
@@ -56,10 +56,10 @@ export const login = async (req, res, next) => {
 
     // Redirigir al usuario a la página principal después del inicio de sesión
     res.redirect('/');
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     // Si hay un error durante el inicio de sesión, se devuelve un mensaje de error JSON
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -71,10 +71,10 @@ export const logout = async (req, res, next) => {
 
     // Redirigir al usuario a la página de inicio de sesión después de cerrar sesión
     res.redirect('/login');
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
     // Si hay un error durante el cierre de sesión, se devuelve un mensaje de error JSON
-    res.status(400).json({ error: err.message });
+    res.status(400).json({ error: error.message });
   }
 };
 

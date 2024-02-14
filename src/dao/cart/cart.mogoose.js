@@ -1,14 +1,20 @@
+// Importa el modelo de carrito y el DAO de productos
 import cartModel from "../../models/carts.model.js";
-import Cart from "../../models/carts.model.js";
 import { productDAO } from "../product/index.js";
 
+// Clase para el acceso a los carritos mediante Mongoose
 export class cartMongoose {
+    // Método para obtener todos los carritos
     async getCarts() {
         return await cartModel.find();
     }
+
+    // Método para obtener un carrito por su ID
     async getCartsById(id) {
         return await cartModel.findOne({ _id: id }).populate({ path: 'products.product', model: 'Product', option: { lean: { virtuals: true } }, });
     }
+
+    // Método para agregar un producto a un carrito
     async addProductCarts(cartId, productId) {
         const cart = await this.getCartsById(cartId);
         if (!cart) {
@@ -24,8 +30,10 @@ export class cartMongoose {
         } else {
             cart.products.push({ product: product._id, quantity: 1, });
         }
-        await cart.save();
+        await cart.save(); 
     }
+
+    // Método para eliminar un producto de un carrito
     async deleteProductCart({ cartId, productId }) {
         let cart = await this.getCartsById(cartId);
         if (!cart) {
@@ -36,11 +44,15 @@ export class cartMongoose {
             throw new Error('Product is not in the cart');
         }
         cart.products = cart.products.filter((item) => item.product.id !== productId);
-        await cart.save();
+        await cart.save(); 
     }
+
+    // Método para eliminar un carrito por su ID
     async deleteCart(id) {
         return await cartModel.findOneAndDelete({ _id: id });
     }
+
+    // Método para actualizar la cantidad de un producto en un carrito
     async updateQuantityProduct(cartId, productId, updateQuantity) {
         let cart = await this.getCartsById(cartId);
         if (!cart) {
@@ -56,8 +68,10 @@ export class cartMongoose {
         }
         cart.products[existingCartProductIndex].quantity =
             updateQuantity <= 0 ? 1 : updateQuantity;
-        await cart.save();
+        await cart.save(); 
     }
+
+    // Método para actualizar un carrito con nuevos productos
     async updateCart(cartId, updateProduct) {
         let cart = await this.getCartsById(cartId);
         if (!cart) {
@@ -70,6 +84,6 @@ export class cartMongoose {
             throw new Error(`Product with id ${unavailableProductIds[0]} doesnt exist`);
         }
         cart.products = updateProduct;
-        return await cart.save();
+        return await cart.save(); 
     }
 }

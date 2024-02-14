@@ -1,7 +1,9 @@
 import { Promise as fsp } from "fs";
 
+// Ruta al archivo JSON donde se almacenan los productos
 const path = '../../data/products.json';
 
+// Clase para representar un producto
 class Products {
     constructor(id, name, price, stock, category, description, status, code) {
         this.name = name;
@@ -13,74 +15,97 @@ class Products {
         this.code = code;
         this.id = id;
     }
-
 }
 
+// Clase que maneja la lectura y escritura de productos en el archivo JSON
 export class productsFs {
+    // Método para leer los datos del archivo o inicializarlo si está vacío o no existe
     async readOrInitializeFileData() {
         try {
+            // Intenta leer el contenido del archivo
             const response = await fsp.readFile(path);
-
+            // Parsea los datos del archivo JSON
             const data = await JSON.parse(response);
-
             return data;
         } catch (error) {
+            // Si hay un error al leer el archivo, crea un archivo vacío y retorna un array vacío
             await fsp.writeFile(path, JSON.stringify([]));
             return [];
         }
     }
+    
+    // Método para obtener todos los productos o un número limitado de productos
     async getProducts(limit) {
+        // Lee los datos del archivo o inicializa el archivo si está vacío
         const products = await this.readOrInitializeFileData();
-        if (limit > 0) {
-            return products.slice(0, limit);
-        } else {
-            return products;
-        }
+        return limit > 0 ? products.slice(0, limit) : products;
     }
+    
+    // Método para agregar un nuevo producto al archivo
     async addProducts(object) {
+        // Lee los datos del archivo o inicializa el archivo si está vacío
         const products = await this.readOrInitializeFileData();
-        const product = new addedProduct({
-            id: products.length + 1,
-            ...object
-        })
+        // Crea una instancia de producto con un ID único
+        const product = new Products(products.length + 1, ...object);
+        // Agrega el nuevo producto al array de productos
         products.push(product);
+        // Escribe los datos actualizados en el archivo
         await fsp.writeFile(path, JSON.stringify(products));
     }
-    async getProductsById(id){
-       const products = await this.readOrInitializeFileData();
-       const productsExist = products.find((product) => product.id.toString() === id.toString());
-       if(!productsExist){
-        throw new Error(`The product no found`);
-       }else{
-        return productsExist;
-       }
-    }
-    async editProducts(id, object){
+    
+    // Método para obtener un producto por su ID
+    async getProductsById(id) {
+        // Lee los datos del archivo o inicializa el archivo si está vacío
         const products = await this.readOrInitializeFileData();
-        let productsExist = products.findIndex((product)=> product.id === id);
-        if(productsExist < 0){
-           return null;
+        // Busca el producto con el ID proporcionado
+        const productsExist = products.find((product) => product.id.toString() === id.toString());
+        if (!productsExist) {
+            throw new Error(`The product was not found`);
+        } else {
+            return productsExist;
         }
+    }
+    
+    // Método para editar un producto existente por su ID
+    async editProducts(id, object) {
+        // Lee los datos del archivo o inicializa el archivo si está vacío
+        const products = await this.readOrInitializeFileData();
+        // Encuentra el índice del producto en el array
+        let productsExist = products.findIndex((product) => product.id === id);
+        if (productsExist < 0) {
+            return null;
+        }
+        // Actualiza las propiedades del producto con los datos proporcionados
         products[productsExist] = {
             ...products[productsExist],
-            ...obj,
-          };
-          await fsp.writeFile(path, JSON.stringify(products));
-          return products[productsExist];
+            ...object,
+        };
+        // Escribe los datos actualizados en el archivo
+        await fsp.writeFile(path, JSON.stringify(products));
+        return products[productsExist];
     }
+    
+    // Método para eliminar un producto por su ID
     async deleteProducts(id){
+        // Lee los datos del archivo o inicializa el archivo si está vacío
         const products = await this.readOrInitializeFileData();
+        // Busca el producto con el ID proporcionado
         const product = products.find((product) => product.id.toString() === id.toString());
         if(!product){
             return null;
         }else{
+            // Copia los productos originales para actualizarlos
             const updateProducts = products;
+            // Filtra los productos para excluir el producto con el ID proporcionado
             filter((product)=> product.id !== id);
+            // Actualiza los ID de los productos restantes después de eliminar el producto
             Map((product,index)=>{
                 return {...product,id:(index + 1).toString()};
             });
+            // Escribe los datos actualizados en el archivo
             await fsp.writeFile(path, JSON.stringify(updateProducts));
             return product;
         }
     }
+    
 }
