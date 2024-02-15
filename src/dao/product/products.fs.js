@@ -1,4 +1,4 @@
-import { Promise as fsp } from "fs";
+import fs from 'fs';
 
 // Ruta al archivo JSON donde se almacenan los productos
 const path = '../../data/products.json';
@@ -17,19 +17,45 @@ class Products {
     }
 }
 
+// Función promesa para leer un archivo
+const readFileAsync = (path) => {
+    return new Promise((resolve, reject) => {
+        fs.readFile(path, (err, data) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(data);
+            }
+        });
+    });
+};
+
+// Función promesa para escribir en un archivo
+const writeFileAsync = (path, data) => {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(path, data, (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });
+};
+
 // Clase que maneja la lectura y escritura de productos en el archivo JSON
 export class productsFs {
     // Método para leer los datos del archivo o inicializarlo si está vacío o no existe
     async readOrInitializeFileData() {
         try {
             // Intenta leer el contenido del archivo
-            const response = await fsp.readFile(path);
+            const response = await readFileAsync(path);
             // Parsea los datos del archivo JSON
             const data = await JSON.parse(response);
             return data;
         } catch (error) {
             // Si hay un error al leer el archivo, crea un archivo vacío y retorna un array vacío
-            await fsp.writeFile(path, JSON.stringify([]));
+            await writeFileAsync(path, JSON.stringify([]));
             return [];
         }
     }
@@ -50,7 +76,7 @@ export class productsFs {
         // Agrega el nuevo producto al array de productos
         products.push(product);
         // Escribe los datos actualizados en el archivo
-        await fsp.writeFile(path, JSON.stringify(products));
+        await writeFileAsync(path, JSON.stringify(products));
     }
     
     // Método para obtener un producto por su ID
@@ -81,7 +107,7 @@ export class productsFs {
             ...object,
         };
         // Escribe los datos actualizados en el archivo
-        await fsp.writeFile(path, JSON.stringify(products));
+        await writeFileAsync(path, JSON.stringify(products));
         return products[productsExist];
     }
     
@@ -97,13 +123,13 @@ export class productsFs {
             // Copia los productos originales para actualizarlos
             const updateProducts = products;
             // Filtra los productos para excluir el producto con el ID proporcionado
-            filter((product)=> product.id !== id);
+            updateProducts.filter((product)=> product.id !== id);
             // Actualiza los ID de los productos restantes después de eliminar el producto
-            Map((product,index)=>{
+            updateProducts.map((product,index)=>{
                 return {...product,id:(index + 1).toString()};
             });
             // Escribe los datos actualizados en el archivo
-            await fsp.writeFile(path, JSON.stringify(updateProducts));
+            await writeFileAsync(path, JSON.stringify(updateProducts));
             return product;
         }
     }

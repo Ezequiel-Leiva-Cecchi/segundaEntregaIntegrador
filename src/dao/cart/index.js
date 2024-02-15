@@ -1,5 +1,5 @@
-import { CartsFs } from "./cart.fs";
-import { cartMongoose } from "./cart.mogoose";
+import { CartsFs } from "./cart.fs.js";
+import { cartMongoose } from "./cart.mogoose.js";
 
 // Variable para el DAO de carritos
 let cartDAO;

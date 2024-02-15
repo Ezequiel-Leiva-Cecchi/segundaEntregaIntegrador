@@ -9,6 +9,8 @@ import viewsRoutes from './routes/views.routes.js';
 import { requireAuth, checkExistingUser } from './middlewares/authMiddleware.js';
 import passport from 'passport';
 import initialzePassport from './config/passport.config.js';
+import productRouter from './routes/products.routes.js';
+import cartRouter from './routes/cart.routes.js';
 
 const PORT = 8080;
 const app = express();
@@ -44,9 +46,12 @@ app.set('view engine', 'handlebars');
 
 // Rutas de sesión
 app.use('/api/session', sessionRoutes);
-
 // Rutas de vistas
 app.use('/', viewsRoutes);
+//Rutas de productos
+app.use('/api/products', productRouter);
+//Rutas de carrito
+app.use('/api/carts', cartRouter);
 
 app.listen(PORT, () => {
     console.log(`Listening on PORT ${PORT}`);

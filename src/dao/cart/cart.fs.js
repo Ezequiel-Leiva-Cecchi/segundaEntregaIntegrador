@@ -1,6 +1,4 @@
-// Importa la promesa fs y el DAO de productos
-import { promise as fsp } from 'fs';
-import { productDAO } from "../product/index.js";
+import fs from 'fs';
 
 // Ruta del archivo de carritos
 const path = '../../data/cart.json';
@@ -18,12 +16,12 @@ export class CartsFs {
     // Método para validar el archivo de carritos
     async validateFile() {
         try {
-            const res = await fsp.readFile(path);
+            const res = await fs.promises.readFile(path);
             const data = await JSON.parse(res);
             return data;
         } catch (error) {
             // Si hay un error al leer el archivo, crea un nuevo archivo vacío de carritos
-            await fsp.writeFile(path, JSON.stringify([]));
+            await fs.promises.writeFile(path, JSON.stringify([]));
             return []; // Devuelve un arreglo vacío
         }
     }
@@ -49,7 +47,7 @@ export class CartsFs {
         const carts = await this.validateFile();
         const newCart = new Cart({ id: carts.length + 1 });
         carts.push(newCart); // Agrega el nuevo carrito al arreglo de carritos
-        await fsp.writeFile(path, JSON.stringify(carts)); // Escribe los carritos actualizados en el archivo
+        await fs.promises.writeFile(path, JSON.stringify(carts)); // Escribe los carritos actualizados en el archivo
         return { id: newCart.id }; // Devuelve el ID del nuevo carrito
     }
 
@@ -72,7 +70,7 @@ export class CartsFs {
             // Si el producto ya existe en el carrito, incrementa su cantidad
             carts[indexInCart].products[productIndex].quantity++;
         }
-        await fsp.writeFile(path, JSON.stringify(carts)); // Escribe los carritos actualizados en el archivo
+        await fs.promises.writeFile(path, JSON.stringify(carts)); // Escribe los carritos actualizados en el archivo
     }
 
     // Método para eliminar un producto de un carrito
@@ -84,7 +82,7 @@ export class CartsFs {
         }
         carts[indexInCart].products = carts[indexInCart].products.filter((product) => product.id !== productId);
         // Filtra los productos del carrito para eliminar el producto deseado
-        await fsp.writeFile(path, JSON.stringify(carts)); // Escribe los carritos actualizados en el archivo
+        await fs.promises.writeFile(path, JSON.stringify(carts)); // Escribe los carritos actualizados en el archivo
     }
 
     // Método para eliminar un carrito por su ID
@@ -96,7 +94,7 @@ export class CartsFs {
         }
         const deleteCart = carts[indexInCart]; // Obtiene el carrito a eliminar
         const updateCart = carts.filter((cart) => cart.id !== id); // Filtra los carritos para eliminar el carrito deseado
-        await fsp.writeFile(path, JSON.stringify(updateCart)); // Escribe los carritos actualizados en el archivo
+        await fs.promises.writeFile(path, JSON.stringify(updateCart)); // Escribe los carritos actualizados en el archivo
         return deleteCart; 
     }
 }

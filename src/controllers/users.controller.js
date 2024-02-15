@@ -1,10 +1,10 @@
-import { userDAO } from '../dao/user/index.js';
+import { usersDAO } from '../dao/users/index.js';
 
 // Función para registrar un nuevo usuario
 export const register = async (req, res, next) => {
   try {
     // Se intenta agregar un nuevo usuario utilizando los datos del cuerpo de la solicitud
-    const user = await userDAO.addUser(req.body);
+    const user = await usersDAO.addUsers(req.body);
 
     // Se verifica si el usuario registrado es el administrador predeterminado
     if (
@@ -35,7 +35,7 @@ export const login = async (req, res, next) => {
     const { email, password } = req.body;
 
     // Se intenta obtener los detalles del usuario basados en el correo electrónico
-    const user = await userDAO.getUserByEmail({ email });
+    const user = await usersDAO.getUserByEmail({ email });
 
     // Se verifica si se encontró un usuario y si la contraseña coincide
     if (!user) throw new Error('User not found');
